@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<world>
+   <country car_code="I"
+            area="301230"
+            capital="cty-Italy-Rome"
+            memberships="org-AfDB org-ADB org-AG org-BIS org-BSEC org-CDB org-SICA org-CEI org-CD org-SELEC org-CE org-CBSS org-EMU org-EAPC org-EBRD org-ECB org-EIB org-CERN org-ESA org-EU org-EITI org-FATF org-FAO org-G-10 org-G-20 org-G-7 org-G-8 org-IADB org-IGAD org-IPU org-IAEA org-IBRD org-ICC org-ICAO org-ICCt org-Interpol org-IDA org-IEA org-IFRCS org-IFC org-IFAD org-IHO org-ILO org-IMO org-IMSO org-IMF org-IOC org-IOM org-ITSO org-ITU org-ITUC org-LAIA org-MIGA org-NATO org-NEA org-NSG org-OECD org-OSCE org-OPCW org-OAS org-PIF org-PCA org-UN org-UNCTAD org-UNESCO org-UNHCR org-UNIDO org-UNIFIL org-UNMOGIP org-MINURSO org-UNMISS org-UNRWA org-UNTSO org-UPU org-WCO org-WHO org-WIPO org-WMO org-UNWTO org-WTO org-ZC">
+      <name>Italy</name>
+      <localname>Repubblica Italiana (la)</localname>
+
+      <province id="prov-Italy-74" country="I" capital="cty-Italy-LAquila">
+         <name>Abruzzo</name>
+         <city id="cty-Italy-LAquila" country="I" province="prov-Italy-74">
+            <name>L'Aquila</name>
+            <latitude>42.35</latitude>
+            <longitude>13.4</longitude>
+            <elevation>714</elevation>
+         </city>
+      </province>
+
+   </country>
+</world>
