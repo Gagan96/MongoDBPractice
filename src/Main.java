@@ -60,10 +60,6 @@ public class Main {
         } finally {
             mongoClient.close();
         }
-
-        mongoClient.close();
-
-
     }
 
     public static void deleteDatabase() {
