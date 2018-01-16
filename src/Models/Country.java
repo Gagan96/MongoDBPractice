@@ -1,5 +1,10 @@
 package Models;
 
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +14,7 @@ public class Country {
     private String country_name;
     private ArrayList<City> cities;
 
+    public Country(){}
     public Country(String carcode, String country_name) {
         this.carcode = carcode;
         this.country_name = country_name;
@@ -42,6 +48,19 @@ public class Country {
 
     public void setCities(ArrayList<City> cities) {
         this.cities = cities;
+    }
+
+    public void inserCountry(String carcode, String country_name, ArrayList<City> cities){
+
+        MongoClient mongoClient = new MongoClient();
+        MongoDatabase database = mongoClient.getDatabase("world");
+        MongoCollection<Document> collectionCities = database.getCollection("countries");
+        List<Document> documents = new ArrayList<Document>();
+        Document document = new Document("carcode", carcode).append("country_name", country_name).append("cities", cities);
+        /*if (database.getCollection("cities").find().equals(document.get("carcode"))){
+            //comprobar carcode y nombre ciudad
+        }*/
+        collectionCities.insertOne(document);
     }
 
     @Override

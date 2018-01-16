@@ -6,6 +6,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.BsonDocument;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class City {
         MongoCollection<Document> collectionCities = database.getCollection("cities");
         List<Document> documents = new ArrayList<Document>();
         Document document = new Document("city_name", cityName).append("country_name", country).append("latitud", latitud).append("longitud", longitud);
-        if (database.getCollection("cities").find().equals(document)){
+        if (database.getCollection("cities").find().equals(document.get("carcode"))){
             //comprobar carcode y nombre ciudad
         }
         collectionCities.insertOne(document);
