@@ -11,5 +11,6 @@ public class MainMONGO {
         ArrayList<City> cities = new ArrayList<>();
         cities.add(city);
         country.inserCountry("test","test",cities);
+
     }
 }

@@ -52,15 +52,15 @@ public class Country {
 
     public void inserCountry(String carcode, String country_name, ArrayList<City> cities){
 
-        MongoClient mongoClient = new MongoClient();
+        MongoClient mongoClient = new MongoClient("localhost",27017);
         MongoDatabase database = mongoClient.getDatabase("world");
-        MongoCollection<Document> collectionCities = database.getCollection("countries");
-        List<Document> documents = new ArrayList<Document>();
-        Document document = new Document("carcode", carcode).append("country_name", country_name).append("cities", cities);
+        MongoCollection<Document> collectionCountries = database.getCollection("countries");
+        Document document = new Document("carcode", carcode)
+                .append("country_name", country_name); //buscar manera de meter list ciudades
         /*if (database.getCollection("cities").find().equals(document.get("carcode"))){
             //comprobar carcode y nombre ciudad
         }*/
-        collectionCities.insertOne(document);
+        collectionCountries.insertOne(document);
     }
 
     @Override

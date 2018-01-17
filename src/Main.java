@@ -20,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
 
-        deleteDatabase();
+        //deleteDatabase();
 
         MongoClient mongoClient = new MongoClient();
         MyReader r;
