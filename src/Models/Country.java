@@ -50,17 +50,36 @@ public class Country {
         this.cities = cities;
     }
 
-    public void inserCountry(String carcode, String country_name, ArrayList<City> cities){
+    public void inserCountry(String carcode, String country_name, List<City> cities){
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase database = mongoClient.getDatabase("world");
         MongoCollection<Document> collectionCities = database.getCollection("countries");
         List<Document> documents = new ArrayList<Document>();
-        Document document = new Document("carcode", carcode).append("country_name", country_name).append("cities", cities);
+        Document document = new Document("carcode", carcode).append("country_name", country_name)
+                .append("cities", cities);
+        try {
+            if (database.getCollection("cities").find().equals(document.get("carcode"))) {
+                throw new Exception ("Error");
+            }else {
+                collectionCities.insertOne(document);
+            }
+        }catch (Exception e){
+            System.out.println("not possible");
+        }
+    }
+
+    public void deleteCountry(String carcode, String country_name){
+
+        MongoClient mongoClient = new MongoClient();
+        MongoDatabase database = mongoClient.getDatabase("world");
+        MongoCollection<Document> collectionCities = database.getCollection("countries");
+        List<Document> documents = new ArrayList<Document>();
+        Document document = new Document("carcode", carcode).append("country_name", country_name);
         /*if (database.getCollection("cities").find().equals(document.get("carcode"))){
             //comprobar carcode y nombre ciudad
         }*/
-        collectionCities.insertOne(document);
+        collectionCities.deleteMany(document);
     }
 
     @Override
