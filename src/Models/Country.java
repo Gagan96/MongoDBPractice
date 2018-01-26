@@ -3,10 +3,15 @@ package Models;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class Country {
 
@@ -50,38 +55,36 @@ public class Country {
         this.cities = cities;
     }
 
-    public void inserCountry(String carcode, String country_name, List<City> cities){
+    public void insertCountry(String carcode, String country_name){
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase database = mongoClient.getDatabase("world");
-        MongoCollection<Document> collectionCities = database.getCollection("countries");
-        List<Document> documents = new ArrayList<Document>();
-        Document document = new Document("carcode", carcode).append("country_name", country_name)
-                .append("cities", cities);
-        try {
-            if (database.getCollection("cities").find().equals(document.get("carcode"))) {
-                throw new Exception ("Error");
-            }else {
-                collectionCities.insertOne(document);
-            }
-        }catch (Exception e){
-            System.out.println("not possible");
-        }
+        MongoCollection<Document> collectionCountries = database.getCollection("countries");
+        Document document = new Document("_id", carcode).append("country_name", country_name);
+        collectionCountries.insertOne(document);
+
     }
 
-    public void deleteCountry(String carcode, String country_name){
+    //preguntar domreader lunes 29
+    public void deleteCountryByName(String carcode, String country_name){
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase database = mongoClient.getDatabase("world");
-        MongoCollection<Document> collectionCities = database.getCollection("countries");
-        List<Document> documents = new ArrayList<Document>();
-        Document document = new Document("carcode", carcode).append("country_name", country_name);
-        /*if (database.getCollection("cities").find().equals(document.get("carcode"))){
-            //comprobar carcode y nombre ciudad
-        }*/
-        collectionCities.deleteMany(document);
+        MongoCollection<Document> collectionCountries= database.getCollection("countries");
+        Document delDoc = new Document("_id",carcode).append("country_name",country_name);
+        collectionCountries.deleteOne(Filters.eq("country_name",country_name));
     }
 
+    public void updateCountryName(String country_name, String newCountryName){
+        MongoClient mongoClient = new MongoClient();
+        MongoDatabase database = mongoClient.getDatabase("world");
+        MongoCollection<Document> collectionCountries = database.getCollection("countries");
+        Document tempDoc = new Document();
+        tempDoc.put("country_name", newCountryName);
+        Document tempUpdateOp = new Document("$set", tempDoc);
+        collectionCountries.updateOne(Filters.eq("country_name", country_name), tempUpdateOp);
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

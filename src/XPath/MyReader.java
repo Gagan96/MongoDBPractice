@@ -1,5 +1,6 @@
 package XPath;
 
+import org.bson.Document;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -15,6 +16,7 @@ public class MyReader extends DomReader {
     public List<String> listCountry() {
         return super.extractList("/world/country/name/text()");
     }
+
 
     public String getCodigo(String country){
         return super.extractValue("/world/country[name='"+country+"']/@car_code");
