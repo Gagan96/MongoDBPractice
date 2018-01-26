@@ -71,7 +71,6 @@ public class Country {
         MongoClient mongoClient = new MongoClient();
         MongoDatabase database = mongoClient.getDatabase("world");
         MongoCollection<Document> collectionCountries= database.getCollection("countries");
-        Document delDoc = new Document("_id",carcode).append("country_name",country_name);
         collectionCountries.deleteOne(Filters.eq("country_name",country_name));
     }
 
@@ -84,7 +83,7 @@ public class Country {
         Document tempUpdateOp = new Document("$set", tempDoc);
         collectionCountries.updateOne(Filters.eq("country_name", country_name), tempUpdateOp);
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

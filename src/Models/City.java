@@ -6,6 +6,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import org.bson.BsonDocument;
 import org.bson.Document;
 
@@ -58,17 +59,33 @@ public class City {
         this.longitud = longitud;
     }
 
-    public void inserCity(String cityName, Country country, int latitud, int longitud){
+    public void insertCity(String carcode, String country_name, int latitud, int longitud){
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase database = mongoClient.getDatabase("world");
-        MongoCollection<Document> collectionCities = database.getCollection("cities");
-        List<Document> documents = new ArrayList<Document>();
-        Document document = new Document("city_name", cityName).append("country_name", country).append("latitud", latitud).append("longitud", longitud);
-        if (database.getCollection("cities").find().equals(document.get("carcode"))){
-            //comprobar carcode y nombre ciudad
-        }
-        collectionCities.insertOne(document);
+        MongoCollection<Document> collectionCountries = database.getCollection("cities");
+        Document document = new Document("_id", carcode).append("country_name", country_name).append("latitud",latitud).append("longitud",longitud);
+        collectionCountries.insertOne(document);
+
+    }
+
+    //preguntar domreader lunes 29
+    public void deleteCityByName(String country_name){
+
+        MongoClient mongoClient = new MongoClient();
+        MongoDatabase database = mongoClient.getDatabase("world");
+        MongoCollection<Document> collectionCountries= database.getCollection("cities");
+        collectionCountries.deleteOne(Filters.eq("city_name",country_name));
+    }
+
+    public void updateCityName(String city_name, String newCityName){
+        MongoClient mongoClient = new MongoClient();
+        MongoDatabase database = mongoClient.getDatabase("world");
+        MongoCollection<Document> collectionCountries = database.getCollection("cities");
+        Document tempDoc = new Document();
+        tempDoc.put("city_name", newCityName);
+        Document tempUpdateOp = new Document("$set", tempDoc);
+        collectionCountries.updateOne(Filters.eq("city_name", city_name), tempUpdateOp);
     }
 
     @Override

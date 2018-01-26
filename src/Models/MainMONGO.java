@@ -18,7 +18,6 @@ public class MainMONGO {
         cities.add(city);
         country.insertCountry("test","test");
         country.updateCountryName("test","hola");
-        //country.insertCountry("test","test");
         //country.deleteCountryByName("test","test");
 
     }
