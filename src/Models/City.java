@@ -16,6 +16,16 @@ import java.util.List;
 public class City {
 
     private String city_name;
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    private String province;
     private Country country_name;
     private int latitud;
     private int longitud;
@@ -59,23 +69,23 @@ public class City {
         this.longitud = longitud;
     }
 
-    public void insertCity(String carcode, String country_name, int latitud, int longitud){
+    public void insertCity(City city, Country country){
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase database = mongoClient.getDatabase("world");
         MongoCollection<Document> collectionCountries = database.getCollection("cities");
-        Document document = new Document("_id", carcode).append("country_name", country_name).append("latitud",latitud).append("longitud",longitud);
+        Document document = new Document("_id", country.getCarcode()+city.getProvince()+city.getCity_name()).append("city_name", city.getCity_name()).append("latitud", city.getLatitud()).append("longitud",city.getLongitud());
         collectionCountries.insertOne(document);
 
     }
 
     //preguntar domreader lunes 29
-    public void deleteCityByName(String country_name){
+    public void deleteCityByName(String city_name){
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase database = mongoClient.getDatabase("world");
         MongoCollection<Document> collectionCountries= database.getCollection("cities");
-        collectionCountries.deleteOne(Filters.eq("city_name",country_name));
+        collectionCountries.deleteOne(Filters.eq("city_name",city_name));
     }
 
     public void updateCityName(String city_name, String newCityName){

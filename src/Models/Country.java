@@ -55,12 +55,12 @@ public class Country {
         this.cities = cities;
     }
 
-    public void insertCountry(String carcode, String country_name){
+    public void insertCountry(Country country){
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase database = mongoClient.getDatabase("world");
         MongoCollection<Document> collectionCountries = database.getCollection("countries");
-        Document document = new Document("_id", carcode).append("country_name", country_name);
+        Document document = new Document("_id", country.getCarcode()).append("country_name", country.getCountry_name());
         collectionCountries.insertOne(document);
 
     }
@@ -74,14 +74,14 @@ public class Country {
         collectionCountries.deleteOne(Filters.eq("country_name",country_name));
     }
 
-    public void updateCountryName(String country_name, String newCountryName){
+    public void updateCountryName(Country country, String newCountryName){
         MongoClient mongoClient = new MongoClient();
         MongoDatabase database = mongoClient.getDatabase("world");
         MongoCollection<Document> collectionCountries = database.getCollection("countries");
         Document tempDoc = new Document();
         tempDoc.put("country_name", newCountryName);
         Document tempUpdateOp = new Document("$set", tempDoc);
-        collectionCountries.updateOne(Filters.eq("country_name", country_name), tempUpdateOp);
+        collectionCountries.updateOne(Filters.eq("country_name", country.getCountry_name()), tempUpdateOp);
     }
 
     @Override

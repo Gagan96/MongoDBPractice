@@ -16,8 +16,9 @@ public class MainMONGO {
         Country country = new Country();
         ArrayList<City> cities = new ArrayList<>();
         cities.add(city);
-        country.insertCountry("test","test");
-        country.updateCountryName("test","hola");
+        country.insertCountry(country);
+        country.updateCountryName(country,"hola");
+        city.insertCity(city,country);
         //country.deleteCountryByName("test","test");
 
     }
