@@ -5,6 +5,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyReader extends DomReader {
@@ -46,6 +47,17 @@ public class MyReader extends DomReader {
 
 
         return s.replace("'","&apos;");
+    }
+
+    public List<Document> countriesList(){
+        List<Document> countries = new ArrayList<>();
+
+        for (String country :
+                listCountry()) {
+            countries.add(new Document("_id",getCodigo(country)).append("country_name",country));
+        }
+
+        return countries;
     }
 
 }

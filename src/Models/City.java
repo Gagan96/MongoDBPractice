@@ -1,132 +1,98 @@
 package Models;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.Block;
-import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import org.bson.BsonDocument;
 import org.bson.Document;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
+
 
 public class City {
 
-    private String city_name;
+    private String cityName;
+    private String province;
+    private double latitude;
+    private double longitude;
+    private Country cityCountry;
+
+
+    public City(String cityName, String province, double latitude, double longitude, Country cityCountry) {
+        this.cityName = cityName;
+        this.province = province;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.cityCountry = cityCountry;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
 
     public String getProvince() {
-        return province;
+        if(province==null) return "";
+        else return province;
     }
 
     public void setProvince(String province) {
         this.province = province;
     }
 
-    private String province;
-    private Country country_name;
-    private int latitud;
-    private int longitud;
-
-    public City(String city_name, Country country_name, int latitud, int longitud) {
-        this.city_name = city_name;
-        this.country_name = country_name;
-        this.latitud = latitud;
-        this.longitud = longitud;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public String getCity_name() {
-        return city_name;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public void setCity_name(String city_name) {
-        this.city_name = city_name;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public Country getCountry_name() {
-        return country_name;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
-    public void setCountry_name(Country country_name) {
-        this.country_name = country_name;
+    public Country getCityCountry() {
+        return cityCountry;
     }
 
-    public int getLatitud() {
-        return latitud;
-    }
-
-    public void setLatitud(int latitud) {
-        this.latitud = latitud;
-    }
-
-    public int getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(int longitud) {
-        this.longitud = longitud;
-    }
-
-    public void insertCity(City city, Country country){
-
-        MongoClient mongoClient = new MongoClient();
-        MongoDatabase database = mongoClient.getDatabase("world");
-        MongoCollection<Document> collectionCountries = database.getCollection("cities");
-        Document document = new Document("_id", country.getCarcode()+city.getProvince()+city.getCity_name()).append("city_name", city.getCity_name()).append("latitud", city.getLatitud()).append("longitud",city.getLongitud());
-        collectionCountries.insertOne(document);
-
-    }
-
-    //preguntar domreader lunes 29
-    public void deleteCityByName(String city_name){
-
-        MongoClient mongoClient = new MongoClient();
-        MongoDatabase database = mongoClient.getDatabase("world");
-        MongoCollection<Document> collectionCountries= database.getCollection("cities");
-        collectionCountries.deleteOne(Filters.eq("city_name",city_name));
-    }
-
-    public void updateCityName(String city_name, String newCityName){
-        MongoClient mongoClient = new MongoClient();
-        MongoDatabase database = mongoClient.getDatabase("world");
-        MongoCollection<Document> collectionCountries = database.getCollection("cities");
-        Document tempDoc = new Document();
-        tempDoc.put("city_name", newCityName);
-        Document tempUpdateOp = new Document("$set", tempDoc);
-        collectionCountries.updateOne(Filters.eq("city_name", city_name), tempUpdateOp);
+    public void setCityCountry(Country cityCountry) {
+        this.cityCountry = cityCountry;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         City city = (City) o;
-
-        if (latitud != city.latitud) return false;
-        if (longitud != city.longitud) return false;
-        if (city_name != null ? !city_name.equals(city.city_name) : city.city_name != null) return false;
-        return country_name != null ? country_name.equals(city.country_name) : city.country_name == null;
+        return Double.compare(city.latitude, latitude) == 0 &&
+                Double.compare(city.longitude, longitude) == 0 &&
+                Objects.equals(cityName, city.cityName) &&
+                Objects.equals(province, city.province) &&
+                Objects.equals(cityCountry, city.cityCountry);
     }
 
     @Override
     public int hashCode() {
-        int result = city_name != null ? city_name.hashCode() : 0;
-        result = 31 * result + (country_name != null ? country_name.hashCode() : 0);
-        result = 31 * result + latitud;
-        result = 31 * result + longitud;
-        return result;
+
+        return Objects.hash(cityName, province, latitude, longitude, cityCountry);
     }
 
     @Override
     public String toString() {
         return "City{" +
-                "city_name='" + city_name + '\'' +
-                ", country_name=" + country_name +
-                ", latitud=" + latitud +
-                ", longitud=" + longitud +
+                "cityName='" + cityName + '\'' +
+                ", province='" + province + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", cityCountry=" + cityCountry.getCountryName() +
                 '}';
     }
 }

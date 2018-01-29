@@ -97,7 +97,7 @@ public class MainSax {
         Queries.findCityByName("test1");
         Queries.deleteCityByName("test1");
         Queries.findCityByName("test1");
-
+//end
         System.out.println();
 
         //Queries.insertCountry(country);

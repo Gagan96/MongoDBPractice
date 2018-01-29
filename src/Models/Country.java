@@ -1,50 +1,36 @@
 package Models;
 
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
-import org.bson.Document;
-
 import java.util.ArrayList;
-import java.util.List;
-
-import static com.mongodb.client.model.Filters.eq;
+import java.util.Objects;
 
 public class Country {
 
-    private String carcode;
-    private String country_name;
+    private String carCode;
+    private String countryName;
     private ArrayList<City> cities;
 
     public Country(){}
-    public Country(String carcode, String country_name) {
-        this.carcode = carcode;
-        this.country_name = country_name;
+
+    public Country(String carCode, String countryName) {
+        this.carCode = carCode;
+        this.countryName = countryName;
+        cities = new ArrayList<>();
     }
 
-    public Country(String carcode, String country_name, ArrayList<City> cities) {
-        this.carcode = carcode;
-        this.country_name = country_name;
-        this.cities = cities;
+    public String getCarCode() {
+        return carCode;
     }
 
-    public String getCarcode() {
-        return carcode;
+    public void setCarCode(String carCode) {
+        this.carCode = carCode;
     }
 
-    public void setCarcode(String carcode) {
-        this.carcode = carcode;
+    public String getCountryName() {
+        return countryName;
     }
 
-    public String getCountry_name() {
-        return country_name;
-    }
-
-    public void setCountry_name(String country_name) {
-        this.country_name = country_name;
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
     public ArrayList<City> getCities() {
@@ -55,62 +41,35 @@ public class Country {
         this.cities = cities;
     }
 
-    public void insertCountry(Country country){
-
-        MongoClient mongoClient = new MongoClient();
-        MongoDatabase database = mongoClient.getDatabase("world");
-        MongoCollection<Document> collectionCountries = database.getCollection("countries");
-        Document document = new Document("_id", country.getCarcode()).append("country_name", country.getCountry_name());
-        collectionCountries.insertOne(document);
-
-    }
-
-    //preguntar domreader lunes 29
-    public void deleteCountryByName(String carcode, String country_name){
-
-        MongoClient mongoClient = new MongoClient();
-        MongoDatabase database = mongoClient.getDatabase("world");
-        MongoCollection<Document> collectionCountries= database.getCollection("countries");
-        collectionCountries.deleteOne(Filters.eq("country_name",country_name));
-    }
-
-    public void updateCountryName(Country country, String newCountryName){
-        MongoClient mongoClient = new MongoClient();
-        MongoDatabase database = mongoClient.getDatabase("world");
-        MongoCollection<Document> collectionCountries = database.getCollection("countries");
-        Document tempDoc = new Document();
-        tempDoc.put("country_name", newCountryName);
-        Document tempUpdateOp = new Document("$set", tempDoc);
-        collectionCountries.updateOne(Filters.eq("country_name", country.getCountry_name()), tempUpdateOp);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Country country = (Country) o;
-
-        if (carcode != null ? !carcode.equals(country.carcode) : country.carcode != null) return false;
-        if (country_name != null ? !country_name.equals(country.country_name) : country.country_name != null)
-            return false;
-        return cities != null ? cities.equals(country.cities) : country.cities == null;
+        return Objects.equals(carCode, country.carCode) &&
+                Objects.equals(countryName, country.countryName) &&
+                Objects.equals(cities, country.cities);
     }
 
     @Override
     public int hashCode() {
-        int result = carcode != null ? carcode.hashCode() : 0;
-        result = 31 * result + (country_name != null ? country_name.hashCode() : 0);
-        result = 31 * result + (cities != null ? cities.hashCode() : 0);
-        return result;
+
+        return Objects.hash(carCode, countryName, cities);
     }
 
     @Override
     public String toString() {
+        String tmp = "";
+        for (int i = 0; i < cities.size(); i++) {
+            City city = cities.get(i);
+            tmp += "\n\t" + (i + 1) + " : " + city.getCityName() + " (" + city.getProvince() + ") - (lat:" + city.getLatitude() + ", lon:" + city.getLongitude() + ")";
+        }
+
         return "Country{" +
-                "carcode='" + carcode + '\'' +
-                ", country_name='" + country_name + '\'' +
-                ", cities=" + cities +
+                "carCode='" + carCode + '\'' +
+                ", countryName='" + countryName + '\'' +
+                ", cities=" +
+                tmp +
                 '}';
     }
 }
