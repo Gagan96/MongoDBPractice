@@ -14,18 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainSax {
-    private static MongoClient mongoClient;
-    private static MongoDatabase database;
-    public static MongoCollection<Document> countryCollection;
-    public static MongoCollection<Document> cityCollection;
+    private static MongoClient mongoClient = new MongoClient();
+    private static MongoDatabase database = mongoClient.getDatabase("world");
+    public static MongoCollection<Document> countryCollection = database.getCollection("countries");
+    public static MongoCollection<Document> cityCollection = database.getCollection("cities");
 
     public static void connect() {
         deleteDatabase();
 
-        mongoClient = new MongoClient();
-        database = mongoClient.getDatabase("world");
-        countryCollection = database.getCollection("countries");
-        cityCollection = database.getCollection("cities");
+//        mongoClient = new MongoClient();
+//        database = mongoClient.getDatabase("world");
+//        countryCollection = database.getCollection("countries");
+//        cityCollection = database.getCollection("cities");
 
 
         try {
@@ -91,21 +91,21 @@ public class MainSax {
 
         Queries.insertCountry(country);
         Queries.insertCity(city,country);
-        //Queries.insertCity(city,country);
-        Queries.findCityByName("test");
+        Queries.insertCity(city,country); // no da error porque el id es automatico
+        Queries.print(Queries.findCityByName("test"));
         Queries.updateCityName("test","test1");
-        Queries.findCityByName("test1");
+        Queries.print(Queries.findCityByName("test1"));
         Queries.deleteCityByName("test1");
-        Queries.findCityByName("test1");
-//end
+        Queries.print(Queries.findCityByName("test1"));
+
         System.out.println();
 
-        //Queries.insertCountry(country);
-        Queries.findCountryByName("test");
+        Queries.insertCountry(country);
+        Queries.print(Queries.findCountryByName("test"));
         Queries.updateCountryName("test","test1");
-        Queries.findCountryByName("test1");
+        Queries.print(Queries.findCountryByName("test1"));
         Queries.deleteCountryByName("test1");
-        Queries.findCountryByName("test1");
+        Queries.print(Queries.findCountryByName("test1"));
 
         disconnect();
     }

@@ -13,31 +13,44 @@ public class Queries {
     private static MongoCollection<Document> countryCollection = MainSax.countryCollection;
     private static MongoCollection<Document> cityCollection = MainSax.cityCollection;
 
+    /*
+    Pendent de pulir coses encara
+     */
     public static void insertCity(City city, Country country){
 
-        if (country.getCarCode().equals(null)) System.out.println("No es possible porque no existe tal pais");
-        else {
-            Document document = new Document("_id", country.getCarCode() + city.getProvince() + city.getCityName()).append("cityName", city.getCityName()).append("latitude", city.getLatitude()).append("longitude", city.getLongitude()).append("country", country.getCarCode());
-            MainSax.cityCollection.insertOne(document);
+        try {
+            Document document = new Document("cityName", city.getCityName()).append("latitude", city.getLatitude()).append("longitude", city.getLongitude()).append("country", country.getCarCode());
+            cityCollection.insertOne(document);
+
+        }catch (Exception e){
+            System.out.println("Ya existe este city");
         }
 
     }
 
-    //preguntar domreader lunes 29
     public static void deleteCityByName(String city_name){
 
-        cityCollection.deleteOne(Filters.eq("cityName",city_name));
+        try {
+            String cityName = findCityByName(city_name).first().get("cityName").toString();
+            if (cityName.isEmpty()) throw new Exception();
+            cityCollection.deleteOne(new Document("cityName",city_name));
+        } catch (Exception e) {
+            System.out.println("No existe este city"+city_name);
+        }
+
     }
+
+    //crear un haystack para encontrar ciudades cerca de una ciudad por longitude o latitude
 
     public static void updateCityName(String city_name, String newCityName){
 
         Document tempDoc = new Document();
         tempDoc.put("cityName", newCityName);
         Document tempUpdateOp = new Document("$set", tempDoc);
-        cityCollection.updateOne(Filters.eq("cityName", city_name), tempUpdateOp);
+        cityCollection.updateOne(findCityByName(city_name).first(), tempUpdateOp);
     }
 
-    public static void findCityByName(String name) {
+    public static FindIterable<Document> findCityByName(String name) {
         Document regQuery = new Document();
         regQuery.append("$regex", "^(?)" + Pattern.quote(name));
         regQuery.append("$options", "i");
@@ -47,17 +60,24 @@ public class Queries {
 
         FindIterable<Document> result = cityCollection.find(findQuery);
 
-        for (Document doc :
+
+        return result;
+
+    }
+
+    public static void print(FindIterable<Document> result){
+
+                for (Document doc :
                 result) {
             System.out.println(doc.toJson());
         }
-        //return (List<Document>) result;
-
     }
+
+
     ////////////////////////////////////////////////////////////////////////////
 
 
-    public static void findCountryByName(String name) {
+    public static FindIterable<Document> findCountryByName(String name) {
         Document regQuery = new Document();
         regQuery.append("$regex", "^(?)" + Pattern.quote(name));
         regQuery.append("$options", "i");
@@ -67,10 +87,7 @@ public class Queries {
 
         FindIterable<Document> result = countryCollection.find(findQuery);
 
-        for (Document doc :
-                result) {
-            System.out.println(doc.toJson());
-        }
+        return result;
 
     }
 
@@ -97,7 +114,6 @@ public class Queries {
 
     }
 
-    //preguntar domreader lunes 29
     public static void deleteCountryByName(String country_name){
 
         countryCollection.deleteOne(Filters.eq("countryName",country_name));
