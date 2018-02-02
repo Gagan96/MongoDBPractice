@@ -86,16 +86,18 @@ public class MainSax {
         //Queries.findCityByName("Barcelona");
 
         Country country = new Country("test","test");
+        Country country1 = new Country("test","test1");
 
         City city= new City("test","test",0.0,0.0,country);
+        City city1= new City("test1","test",0.0,0.0,country);
 
         Queries.insertCountry(country);
         Queries.insertCity(city,country);
         Queries.insertCity(city,country); // no da error porque el id es automatico
         Queries.print(Queries.findCityByName("test"));
-        Queries.updateCityName("test","test1");
+        //Queries.updateCityName("test","test1");
         Queries.print(Queries.findCityByName("test1"));
-        Queries.deleteCityByName("test1");
+        Queries.deleteCityByName(city1,country1);
         Queries.print(Queries.findCityByName("test1"));
 
         System.out.println();
@@ -104,7 +106,7 @@ public class MainSax {
         Queries.print(Queries.findCountryByName("test"));
         Queries.updateCountryName("test","test1");
         Queries.print(Queries.findCountryByName("test1"));
-        Queries.deleteCountryByName("test1");
+        //Queries.deleteCountryByName("test1");
         Queries.print(Queries.findCountryByName("test1"));
 
         disconnect();
